@@ -4,7 +4,17 @@ Scan your JavaScript project's dependencies and find which ones can be replaced 
 
 **Zero dependencies.** This tool practices what it preaches.
 
-## Install
+## Install as a Copilot Skill
+
+```bash
+npx skills add https://github.com/soderlind/browser-native --skill browser-native -g
+```
+
+Once installed, ask Copilot to scan your project:
+
+> "Scan my dependencies for browser-native replacements"
+
+## Install as a CLI
 
 ```bash
 npm install -g browser-native
@@ -16,7 +26,7 @@ Or run directly with npx:
 npx browser-native
 ```
 
-## Usage
+## CLI Usage
 
 ```bash
 # Scan current project
@@ -112,6 +122,24 @@ Automatically scans `packages/`, `apps/`, `libs/`, and `modules/` subdirectories
 ## Requirements
 
 Node.js 18+
+
+## Project structure
+
+```
+skills/
+  browser-native/
+    SKILL.md                        # Copilot skill definition
+    scripts/
+      cli.js                        # CLI entry point
+      scanner.js                    # Package.json scanner
+      replacements.js               # Database of 70+ replaceable packages
+      formatters/
+        table.js                    # ANSI terminal table
+        markdown.js                 # Markdown report with code examples
+        json.js                     # JSON output
+    references/
+      replacements-guide.md         # Detailed replacement reference
+```
 
 ## License
 

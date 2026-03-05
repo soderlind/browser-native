@@ -4,9 +4,9 @@
   "description": "Scan JavaScript dependencies and find which ones can be replaced with modern browser/runtime built-in APIs",
   "type": "module",
   "bin": {
-    "browser-native": "./src/cli.js"
+    "browser-native": "./skills/browser-native/scripts/cli.js"
   },
-  "main": "./src/cli.js",
+  "main": "./skills/browser-native/scripts/cli.js",
   "keywords": [
     "browser",
     "native",
@@ -22,6 +22,6 @@
     "node": ">=18.0.0"
   },
   "files": [
-    "src/"
+    "skills/"
   ]
 }
