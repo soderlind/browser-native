@@ -1,0 +1,27 @@
+{
+  "name": "browser-native",
+  "version": "1.0.0",
+  "description": "Scan JavaScript dependencies and find which ones can be replaced with modern browser/runtime built-in APIs",
+  "type": "module",
+  "bin": {
+    "browser-native": "./src/cli.js"
+  },
+  "main": "./src/cli.js",
+  "keywords": [
+    "browser",
+    "native",
+    "polyfill",
+    "dependencies",
+    "audit",
+    "modernize",
+    "built-in",
+    "replace"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "src/"
+  ]
+}
