@@ -17,13 +17,13 @@ Once installed, ask Copilot to scan your project:
 ## Install as a CLI
 
 ```bash
-npm install -g browser-native
+npm install -g @soderlind/browser-native
 ```
 
 Or run directly with npx:
 
 ```bash
-npx browser-native
+npx @soderlind/browser-native
 ```
 
 ## CLI Usage
@@ -111,7 +111,7 @@ Structured output for piping into other tools:
 The tool exits with code **1** if replaceable dependencies are found, **0** if none. Use in CI to flag outdated polyfills:
 
 ```yaml
-- run: npx browser-native
+- run: npx @soderlind/browser-native
   continue-on-error: true
 ```
 

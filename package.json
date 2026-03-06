@@ -1,27 +1,32 @@
 {
-  "name": "browser-native",
-  "version": "1.0.0",
-  "description": "Scan JavaScript dependencies and find which ones can be replaced with modern browser/runtime built-in APIs",
-  "type": "module",
-  "bin": {
-    "browser-native": "./skills/browser-native/scripts/cli.js"
-  },
-  "main": "./skills/browser-native/scripts/cli.js",
-  "keywords": [
-    "browser",
-    "native",
-    "polyfill",
-    "dependencies",
-    "audit",
-    "modernize",
-    "built-in",
-    "replace"
-  ],
-  "license": "MIT",
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "files": [
-    "skills/"
-  ]
+	"name": "@soderlind/browser-native",
+	"version": "1.0.0",
+	"description": "Scan JavaScript dependencies and find which ones can be replaced with modern browser/runtime built-in APIs",
+	"type": "module",
+	"bin": {
+		"browser-native": "./skills/browser-native/scripts/cli.js"
+	},
+	"main": "./skills/browser-native/scripts/cli.js",
+	"keywords": [
+		"browser",
+		"native",
+		"polyfill",
+		"dependencies",
+		"audit",
+		"modernize",
+		"built-in",
+		"replace"
+	],
+	"license": "MIT",
+	"engines": {
+		"node": ">=18.0.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/soderlind/browser-native.git"
+	},
+	"author": "Per Soderlind",
+	"files": [
+		"skills/"
+	]
 }
