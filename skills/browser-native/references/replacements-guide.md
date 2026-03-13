@@ -188,7 +188,7 @@ uniq([1, 2, 2, 3]);
 [0, 1, false, 2, '', 3].filter(Boolean); // [1, 2, 3]
 ```
 
-### array.prototype.flat, array.prototype.flatmap, array.from, array.prototype.find, array.prototype.findindex, array.prototype.at
+### array.prototype.flat, array.prototype.flatmap, array.from, array-from, array.prototype.find, array.prototype.findindex, array.prototype.at
 - **Confidence:** full
 - **Notes:** Polyfills — these methods are natively available.
 
@@ -292,14 +292,11 @@ et.dispatchEvent(new CustomEvent('data', { detail: payload }));
 '5'.padStart(3, '0'); // '005'
 ```
 
-### Various string.prototype.* polyfills → native methods
+### string.prototype.padstart, string.prototype.padend, string.prototype.trimstart, string.prototype.trimend, string.prototype.startswith, string.prototype.endswith, string.prototype.includes, string.prototype.repeat, string.prototype.at, string.prototype.matchall → native methods
 - padStart, padEnd, trimStart, trimEnd, startsWith, endsWith, includes, repeat, at, matchAll
 - All **full** confidence — just remove the polyfill.
 
 ### repeat-string → `.repeat()`
-
-### string.prototype.matchall → `.matchAll()`
-- **Confidence:** full
 
 ---
 

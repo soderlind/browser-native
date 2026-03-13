@@ -51,7 +51,7 @@ browser-native --help
 
 ## What it detects
 
-The tool checks your `dependencies` and `devDependencies` against a database of **100+ npm packages** that have native browser/runtime equivalents:
+The tool checks your `dependencies` and `devDependencies` against a database of **[100+ npm packages](skills/browser-native/references/replacements-guide.md)** that have native browser/runtime equivalents:
 
 | Category | Example packages | Native replacement |
 |---|---|---|

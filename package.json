@@ -4,7 +4,7 @@
 	"description": "Scan JavaScript dependencies and find which ones can be replaced with modern browser/runtime built-in APIs",
 	"type": "module",
 	"bin": {
-		"browser-native": "./skills/browser-native/scripts/cli.js"
+		"browser-native": "skills/browser-native/scripts/cli.js"
 	},
 	"main": "./skills/browser-native/scripts/cli.js",
 	"keywords": [
@@ -23,7 +23,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/soderlind/browser-native.git"
+		"url": "git+https://github.com/soderlind/browser-native.git"
 	},
 	"author": "Per Soderlind",
 	"files": [
