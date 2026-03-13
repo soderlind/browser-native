@@ -50,18 +50,18 @@ node skills/browser-native/scripts/cli.js [dir] --md --out report.md
 
 ### 2) Review the results
 
-The scanner checks `dependencies` and `devDependencies` against an internal database of **70+ npm packages** that have native browser/runtime equivalents, organized in these categories:
+The scanner checks `dependencies` and `devDependencies` against an internal database of **100+ npm packages** that have native browser/runtime equivalents, organized in these categories:
 
 | Category | Example packages | Native replacement |
 |---|---|---|
-| HTTP | axios, node-fetch, request, got | `fetch()` |
-| URL / Query | query-string, qs, url-parse | `URL`, `URLSearchParams` |
-| Object Utils | lodash.clonedeep, object-assign, has | `structuredClone()`, `Object.assign()`, `Object.hasOwn()` |
+| HTTP | axios, node-fetch, request, unfetch | `fetch()` |
+| URL / Query | query-string, qs, url-parse, url-search-params-polyfill | `URL`, `URLSearchParams` |
+| Object Utils | lodash.clonedeep, object-assign, object.values, object.hasown | `structuredClone()`, `Object.assign()`, `Object.values()`, `Object.hasOwn()` |
 | Array Utils | lodash.flatten, lodash.find, lodash.uniq | `.flat()`, `.find()`, `[...new Set()]` |
 | UUID | uuid, nanoid, shortid | `crypto.randomUUID()` |
 | Date | moment, moment-timezone | `Intl.DateTimeFormat`, `Intl.RelativeTimeFormat` |
-| Promises | bluebird, q, es6-promise | `Promise` |
-| Strings | left-pad, repeat-string | `.padStart()`, `.repeat()` |
+| Promises | bluebird, q, promise-polyfill, promise.allsettled | `Promise`, `Promise.allSettled()` |
+| Strings | left-pad, repeat-string, string.prototype.matchall | `.padStart()`, `.repeat()`, `.matchAll()` |
 | Type checks | is-number, isarray, is-promise | `typeof`, `Array.isArray()` |
 | Encoding | base-64, js-base64 | `btoa()`, `atob()` |
 | Polyfills | abort-controller, text-encoding, globalthis | Native globals |

@@ -1,6 +1,6 @@
 {
 	"name": "@soderlind/browser-native",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "Scan JavaScript dependencies and find which ones can be replaced with modern browser/runtime built-in APIs",
 	"type": "module",
 	"bin": {
