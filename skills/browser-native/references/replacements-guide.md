@@ -49,7 +49,7 @@ const res = await fetch('https://api.example.com/data');
 - **Confidence:** partial
 - **Notes:** These have retries, hooks, chaining. fetch needs manual helpers for those.
 
-### isomorphic-fetch, cross-fetch, whatwg-fetch → `fetch()`
+### isomorphic-fetch, cross-fetch, whatwg-fetch, unfetch → `fetch()`
 - **Confidence:** full
 - **Notes:** Polyfills — just remove.
 
@@ -92,7 +92,7 @@ const url = new URL('https://example.com:8080/path?q=1');
 // url.hostname, url.pathname, url.searchParams.get('q')
 ```
 
-### querystring → `URLSearchParams`
+### querystring, url-search-params-polyfill → `URLSearchParams`
 - **Confidence:** full
 - **Notes:** Node.js legacy module. URLSearchParams is the modern replacement.
 
@@ -114,7 +114,7 @@ const copy = cloneDeep(original);
 const copy = structuredClone(original);
 ```
 
-### lodash.assign, object-assign → `Object.assign()` / spread
+### lodash.assign, object-assign, object.assign → `Object.assign()` / spread
 - **Confidence:** full
 - **Min support:** Chrome 45, Firefox 34, Safari 9, Edge 12, Node 4
 
@@ -127,13 +127,17 @@ const result = assign({}, obj1, obj2);
 const result = { ...obj1, ...obj2 };
 ```
 
-### lodash.keys → `Object.keys()`
-### lodash.values → `Object.values()`
+### lodash.keys, object-keys → `Object.keys()`
+### lodash.values, object.values → `Object.values()`
 ### lodash.entries, object.entries → `Object.entries()`
 ### object.fromentries, fromentries → `Object.fromEntries()`
-### has, has-own → `Object.hasOwn()`
+### has, has-own, object.hasown → `Object.hasOwn()`
 
 All **full** confidence — direct native equivalents.
+
+### lodash.get, dlv → optional chaining + `??`
+- **Confidence:** partial
+- **Notes:** Good for fixed property paths. String-path traversal and keys containing dots need manual rewrites.
 
 ---
 
@@ -249,14 +253,20 @@ new Intl.DateTimeFormat('en-US', {
 ### bluebird → `Promise`
 - **Confidence:** partial — promisify, map(concurrency), cancel are not built-in.
 
-### q, rsvp, es6-promise → `Promise`
+### q → `Promise`
+- **Confidence:** partial — `Q.defer()` patterns need a small helper when migrating.
+
+### rsvp, es6-promise, promise-polyfill → `Promise`
 - **Confidence:** full — native Promise + async/await replaces these entirely.
+
+### promise.allsettled → `Promise.allSettled()`
+- **Confidence:** full — modern runtimes already include it.
 
 ---
 
 ## Events
 
-### eventemitter3 → `EventTarget` + `CustomEvent`
+### eventemitter3, mitt → `EventTarget` + `CustomEvent`
 - **Confidence:** partial — EventTarget is more verbose. Node.js 15+ has EventTarget.
 
 ```js
@@ -283,10 +293,13 @@ et.dispatchEvent(new CustomEvent('data', { detail: payload }));
 ```
 
 ### Various string.prototype.* polyfills → native methods
-- padStart, padEnd, trimStart, trimEnd, startsWith, endsWith, includes, repeat, at
+- padStart, padEnd, trimStart, trimEnd, startsWith, endsWith, includes, repeat, at, matchAll
 - All **full** confidence — just remove the polyfill.
 
 ### repeat-string → `.repeat()`
+
+### string.prototype.matchall → `.matchAll()`
+- **Confidence:** full
 
 ---
 
@@ -305,8 +318,20 @@ All **full** confidence.
 ## Encoding
 
 ### base-64, js-base64 → `btoa()` / `atob()`
+- **Confidence:** partial
+- **Notes:** btoa/atob work with ASCII only. For Unicode text or Buffer-style workflows, use a UTF-8 helper or Buffer in Node.js.
+
+---
+
+## FormData
+
+### form-data → `FormData`
+- **Confidence:** partial
+- **Notes:** Native FormData works well with fetch, but form-data-specific helpers like `getHeaders()` and stream-oriented integrations need manual changes.
+
+### formdata-polyfill → `FormData`
 - **Confidence:** full
-- **Notes:** btoa/atob work with ASCII. For Unicode, use TextEncoder + Uint8Array.
+- **Notes:** Polyfill — remove it in modern browsers and Node.js 18+.
 
 ---
 
@@ -327,7 +352,7 @@ These packages provide functionality that is now globally available:
 | resize-observer-polyfill | `ResizeObserver` | 64 |
 | raf | `requestAnimationFrame` | 24 |
 | web-streams-polyfill | `ReadableStream` | 52 |
-| form-data / formdata-polyfill | `FormData` | 7 |
+| formdata-polyfill | `FormData` | 7 |
 
 ---
 

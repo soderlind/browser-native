@@ -98,6 +98,16 @@ const replacements = {
     after: `const res = await fetch('/api');`
   },
 
+  "unfetch": {
+    category: "HTTP",
+    browserApi: "fetch()",
+    minBrowser: { chrome: 42, firefox: 39, safari: 10.1, edge: 14, node: 18 },
+    confidence: "full",
+    notes: "Polyfill — no longer needed in modern browsers and Node.js 18+.",
+    before: `import fetch from 'unfetch';\nconst res = await fetch('/api');`,
+    after: `const res = await fetch('/api');`
+  },
+
   "needle": {
     category: "HTTP",
     browserApi: "fetch()",
@@ -147,6 +157,16 @@ const replacements = {
     notes: "Node.js legacy module. URLSearchParams is the modern replacement.",
     before: `const querystring = require('querystring');\nconst parsed = querystring.parse('foo=bar&baz=qux');`,
     after: `const parsed = Object.fromEntries(new URLSearchParams('foo=bar&baz=qux'));`
+  },
+
+  "url-search-params-polyfill": {
+    category: "URL / Query String",
+    browserApi: "URLSearchParams",
+    minBrowser: { chrome: 49, firefox: 44, safari: 10.1, edge: 17, node: 10 },
+    confidence: "full",
+    notes: "Polyfill — URLSearchParams is natively available in modern browsers and Node.js.",
+    before: `import 'url-search-params-polyfill';\nconst params = new URLSearchParams('foo=bar');`,
+    after: `const params = new URLSearchParams('foo=bar');`
   },
 
   // ───────────────────────── Deep Clone / Object Utilities ─────────────────────────
@@ -199,6 +219,16 @@ const replacements = {
     after: `const result = Object.assign({}, obj1, obj2);`
   },
 
+  "object.assign": {
+    category: "Object Utilities",
+    browserApi: "Object.assign()",
+    minBrowser: { chrome: 45, firefox: 34, safari: 9, edge: 12, node: 4 },
+    confidence: "full",
+    notes: "Polyfill — Object.assign is available in all modern environments.",
+    before: `const assign = require('object.assign');\nconst result = assign({}, obj1, obj2);`,
+    after: `const result = Object.assign({}, obj1, obj2);`
+  },
+
   "lodash.keys": {
     category: "Object Utilities",
     browserApi: "Object.keys()",
@@ -208,12 +238,32 @@ const replacements = {
     after: `const k = Object.keys(obj);`
   },
 
+  "object-keys": {
+    category: "Object Utilities",
+    browserApi: "Object.keys()",
+    minBrowser: { chrome: 5, firefox: 4, safari: 5, edge: 12, node: 0.10 },
+    confidence: "full",
+    notes: "Polyfill — Object.keys is natively available.",
+    before: `const keys = require('object-keys');\nconst k = keys(obj);`,
+    after: `const k = Object.keys(obj);`
+  },
+
   "lodash.values": {
     category: "Object Utilities",
     browserApi: "Object.values()",
     minBrowser: { chrome: 54, firefox: 47, safari: 10.1, edge: 14, node: 7 },
     confidence: "full",
     before: `const values = require('lodash.values');\nconst v = values(obj);`,
+    after: `const v = Object.values(obj);`
+  },
+
+  "object.values": {
+    category: "Object Utilities",
+    browserApi: "Object.values()",
+    minBrowser: { chrome: 54, firefox: 47, safari: 10.1, edge: 14, node: 7 },
+    confidence: "full",
+    notes: "Polyfill — Object.values is natively available.",
+    before: `const values = require('object.values');\nconst v = values(obj);`,
     after: `const v = Object.values(obj);`
   },
 
@@ -270,6 +320,36 @@ const replacements = {
     confidence: "full",
     before: `const hasOwn = require('has-own');\nhasOwn(obj, 'key');`,
     after: `Object.hasOwn(obj, 'key');`
+  },
+
+  "object.hasown": {
+    category: "Object Utilities",
+    browserApi: "Object.hasOwn()",
+    minBrowser: { chrome: 93, firefox: 92, safari: 15.4, edge: 93, node: 16.9 },
+    confidence: "full",
+    notes: "Polyfill — Object.hasOwn is natively available in modern environments.",
+    before: `const hasOwn = require('object.hasown');\nhasOwn(obj, 'key');`,
+    after: `Object.hasOwn(obj, 'key');`
+  },
+
+  "lodash.get": {
+    category: "Object Utilities",
+    browserApi: "Optional chaining + nullish coalescing",
+    minBrowser: { chrome: 80, firefox: 74, safari: 13.1, edge: 80, node: 14 },
+    confidence: "partial",
+    notes: "Works well for fixed property paths. String path parsing, array index strings, and keys containing dots need manual rewrites.",
+    before: `const get = require('lodash.get');\nconst city = get(user, 'profile.address.city', 'Unknown');`,
+    after: `const city = user?.profile?.address?.city ?? 'Unknown';`
+  },
+
+  "dlv": {
+    category: "Object Utilities",
+    browserApi: "Optional chaining + nullish coalescing",
+    minBrowser: { chrome: 80, firefox: 74, safari: 13.1, edge: 80, node: 14 },
+    confidence: "partial",
+    notes: "Works well for fixed property paths. String path parsing and dynamic path traversal still need custom logic.",
+    before: `import dlv from 'dlv';\nconst city = dlv(user, 'profile.address.city', 'Unknown');`,
+    after: `const city = user?.profile?.address?.city ?? 'Unknown';`
   },
 
   // ───────────────────────── Array Utilities ─────────────────────────
@@ -546,10 +626,10 @@ const replacements = {
     category: "Promises",
     browserApi: "Promise",
     minBrowser: { chrome: 32, firefox: 29, safari: 7.1, edge: 12, node: 0.12 },
-    confidence: "full",
-    notes: "Q is obsolete. Native Promise + async/await replaces it entirely.",
+    confidence: "partial",
+    notes: "Q is obsolete, but Q.defer-style workflows need a small helper when migrating to native Promise.",
     before: `const Q = require('q');\nconst deferred = Q.defer();\ndeferred.resolve(value);`,
-    after: `const promise = new Promise((resolve) => {\n  resolve(value);\n});`
+    after: `function deferred() {\n  let resolve;\n  let reject;\n  const promise = new Promise((res, rej) => {\n    resolve = res;\n    reject = rej;\n  });\n  return { promise, resolve, reject };\n}\n\nconst d = deferred();\nd.resolve(value);`
   },
 
   "rsvp": {
@@ -571,6 +651,26 @@ const replacements = {
     after: `Promise.resolve(42);`
   },
 
+  "promise-polyfill": {
+    category: "Promises",
+    browserApi: "Promise",
+    minBrowser: { chrome: 32, firefox: 29, safari: 7.1, edge: 12, node: 0.12 },
+    confidence: "full",
+    notes: "Polyfill — Promise is available everywhere.",
+    before: `const Promise = require('promise-polyfill');\nPromise.resolve(42);`,
+    after: `Promise.resolve(42);`
+  },
+
+  "promise.allsettled": {
+    category: "Promises",
+    browserApi: "Promise.allSettled()",
+    minBrowser: { chrome: 76, firefox: 71, safari: 13, edge: 79, node: 12.9 },
+    confidence: "full",
+    notes: "Polyfill — Promise.allSettled is natively available in modern environments.",
+    before: `require('promise.allsettled/auto');\nconst results = await Promise.allSettled(promises);`,
+    after: `const results = await Promise.allSettled(promises);`
+  },
+
   // ───────────────────────── Events ─────────────────────────
 
   "eventemitter3": {
@@ -581,6 +681,16 @@ const replacements = {
     notes: "EventTarget is slightly more verbose. Node.js 15+ has EventTarget. eventemitter3 API is simpler for non-DOM use.",
     before: `import EventEmitter from 'eventemitter3';\nconst ee = new EventEmitter();\nee.on('data', handler);\nee.emit('data', payload);`,
     after: `const et = new EventTarget();\net.addEventListener('data', (e) => handler(e.detail));\net.dispatchEvent(new CustomEvent('data', { detail: payload }));`
+  },
+
+  "mitt": {
+    category: "Events",
+    browserApi: "EventTarget + CustomEvent",
+    minBrowser: { chrome: 4, firefox: 6, safari: 3.1, edge: 12, node: 15 },
+    confidence: "partial",
+    notes: "EventTarget covers simple pub/sub. mitt's wildcard handlers and tiny ergonomic API need manual wrappers.",
+    before: `import mitt from 'mitt';\nconst emitter = mitt();\nemitter.on('data', handler);\nemitter.emit('data', payload);`,
+    after: `const target = new EventTarget();\ntarget.addEventListener('data', (e) => handler(e.detail));\ntarget.dispatchEvent(new CustomEvent('data', { detail: payload }));`
   },
 
   // ───────────────────────── String Utilities ─────────────────────────
@@ -666,6 +776,16 @@ const replacements = {
     after: `'ha'.repeat(3);  // 'hahaha'`
   },
 
+  "string.prototype.matchall": {
+    category: "String Utilities",
+    browserApi: "String.prototype.matchAll()",
+    minBrowser: { chrome: 73, firefox: 67, safari: 13, edge: 79, node: 12 },
+    confidence: "full",
+    notes: "Polyfill — matchAll() is natively available.",
+    before: `require('string.prototype.matchall/auto');\nconst matches = [...'a1b2'.matchAll(/\\d/g)];`,
+    after: `const matches = [...'a1b2'.matchAll(/\\d/g)];`
+  },
+
   "repeat-string": {
     category: "String Utilities",
     browserApi: "String.prototype.repeat()",
@@ -737,8 +857,8 @@ const replacements = {
     category: "Encoding",
     browserApi: "btoa() / atob()",
     minBrowser: { chrome: 4, firefox: 1, safari: 3, edge: 12, node: 16 },
-    confidence: "full",
-    notes: "btoa/atob work with ASCII. For Unicode, use TextEncoder + Uint8Array.",
+    confidence: "partial",
+    notes: "btoa/atob work with ASCII only. For Unicode text or Buffer-style workflows, use a UTF-8 helper or Buffer in Node.js.",
     before: `const base64 = require('base-64');\nconst encoded = base64.encode('hello');\nconst decoded = base64.decode(encoded);`,
     after: `const encoded = btoa('hello');\nconst decoded = atob(encoded);`
   },
@@ -747,7 +867,8 @@ const replacements = {
     category: "Encoding",
     browserApi: "btoa() / atob()",
     minBrowser: { chrome: 4, firefox: 1, safari: 3, edge: 12, node: 16 },
-    confidence: "full",
+    confidence: "partial",
+    notes: "Use with ASCII payloads only. Unicode-safe encoding needs a UTF-8 helper or Buffer in Node.js.",
     before: `const { Base64 } = require('js-base64');\nBase64.encode('hello');`,
     after: `btoa('hello');`
   },
@@ -868,8 +989,8 @@ const replacements = {
     category: "FormData",
     browserApi: "FormData",
     minBrowser: { chrome: 7, firefox: 4, safari: 5, edge: 12, node: 18 },
-    confidence: "full",
-    notes: "Native FormData is available in browsers; Node.js 18+ has global FormData.",
+    confidence: "partial",
+    notes: "Native FormData works well with fetch, but form-data-specific helpers like getHeaders() and stream-oriented integrations need manual changes.",
     before: `const FormData = require('form-data');\nconst form = new FormData();\nform.append('file', buffer, 'file.txt');`,
     after: `const form = new FormData();\nform.append('file', new Blob([buffer]), 'file.txt');`
   },

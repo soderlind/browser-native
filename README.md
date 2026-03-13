@@ -51,18 +51,18 @@ browser-native --help
 
 ## What it detects
 
-The tool checks your `dependencies` and `devDependencies` against a database of **70+ npm packages** that have native browser/runtime equivalents:
+The tool checks your `dependencies` and `devDependencies` against a database of **100+ npm packages** that have native browser/runtime equivalents:
 
 | Category | Example packages | Native replacement |
 |---|---|---|
-| HTTP | axios, node-fetch, request, got | `fetch()` |
-| URL / Query | query-string, qs, url-parse | `URL`, `URLSearchParams` |
-| Object Utils | lodash.clonedeep, object-assign | `structuredClone()`, `Object.assign()` |
+| HTTP | axios, node-fetch, request, unfetch | `fetch()` |
+| URL / Query | query-string, qs, url-parse, url-search-params-polyfill | `URL`, `URLSearchParams` |
+| Object Utils | lodash.clonedeep, object-assign, object.values, object.hasown | `structuredClone()`, `Object.assign()`, `Object.values()`, `Object.hasOwn()` |
 | Array Utils | lodash.flatten, lodash.find, lodash.uniq | `.flat()`, `.find()`, `[...new Set()]` |
 | UUID | uuid, nanoid, shortid | `crypto.randomUUID()` |
 | Date | moment, moment-timezone | `Intl.DateTimeFormat` |
-| Promises | bluebird, q, es6-promise | `Promise` |
-| Strings | left-pad, repeat-string | `.padStart()`, `.repeat()` |
+| Promises | bluebird, q, promise-polyfill, promise.allsettled | `Promise`, `Promise.allSettled()` |
+| Strings | left-pad, repeat-string, string.prototype.matchall | `.padStart()`, `.repeat()`, `.matchAll()` |
 | Type checks | is-number, isarray, is-promise | `typeof`, `Array.isArray()` |
 | Encoding | base-64, js-base64 | `btoa()`, `atob()` |
 | Polyfills | abort-controller, text-encoding, globalthis | Native globals |
@@ -132,7 +132,7 @@ skills/
     scripts/
       cli.js                        # CLI entry point
       scanner.js                    # Package.json scanner
-      replacements.js               # Database of 70+ replaceable packages
+      replacements.js               # Database of 100+ replaceable packages
       formatters/
         table.js                    # ANSI terminal table
         markdown.js                 # Markdown report with code examples
