@@ -4,15 +4,12 @@ Scan your JavaScript project's dependencies and find which ones can be replaced 
 
 **Zero dependencies.** This tool practices what it preaches.
 
-## Install as a Copilot Skill
+## The skill has moved
 
-```bash
-npx skills add https://github.com/soderlind/browser-native --skill browser-native -g
-```
+This skill now lives in the consolidated skills repo:
 
-Once installed, ask Copilot to scan your project:
+https://github.com/soderlind/skills/
 
-> "Scan my dependencies for browser-native replacements"
 
 ## Install as a CLI
 
